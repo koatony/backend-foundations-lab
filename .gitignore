@@ -1,0 +1,13 @@
+.venv/
+venv/
+ENV/
+
+# Python 編譯與快取檔案
+__pycache__/
+*.py[cod]
+*$py.class
+# 環境變數設定檔（避免密鑰外洩）
+.env
+# IDE 設定檔
+.vscode/
+.idea/
