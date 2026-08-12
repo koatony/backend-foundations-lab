@@ -7,10 +7,10 @@ def test_create_item():
     repo = ItemRepository()
     result = repo.create(item)
     #是否產生id
-    assert len(repo.storage) == 1
+    assert len(repo._storage) == 1
     assert result.title == "test"
     assert result.price == 10
-    assert result == repo.storage.get(result.id)
+    assert result == repo._storage.get(result.id)
     
     
 @pytest.mark.parametrize("title,price", [

@@ -11,3 +11,10 @@ __pycache__/
 # IDE 設定檔
 .vscode/
 .idea/
+
+# SQLite local db
+*.db
+dev.db
+
+# Claude/Agent temp files
+.claude/
