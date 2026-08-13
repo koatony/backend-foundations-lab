@@ -3,7 +3,7 @@ from app.services.ItemService import ItemService
 from fastapi import Depends
 from app.repositories.task_repository import TaskRepository
 from app.services.task_service import TaskService
-
+from app.database import get_db
 
 _repo = ItemRepository()
 
@@ -16,11 +16,10 @@ def get_item_service(repo: ItemRepository = Depends(get_item_repository)) -> Ite
     return ItemService(item_repo=repo)
 
 
-_task_repo = TaskRepository()
 
 
-def get_task_repository():
-    return _task_repo
+def get_task_repository(db:Session = Depends(get_db)):
+    return TaskRepository(db=db)
 
 
 def get_task_service(repo: TaskRepository = Depends(get_task_repository)) -> TaskService:

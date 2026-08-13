@@ -15,6 +15,7 @@
 | **Ex-05** | 三層架構重構 (Service Layer, Domain Exceptions & Mock 測試) | W3 | `fast-api-lab/app/services/ItemService.py` <br> `fast-api-lab/app/dependencies.py` <br> `fast-api-lab/tests/services/test_item_service.py` | ✅ 已完成 | Router-Service-Repo 三層架構解耦, 自訂 Domain Exceptions, MagicMock 隔離測試, 依賴注入 (Depends) |
 | **Ex-06** | Task REST API v0.1 & pytest 完整測試 suite | W4 (Month 1 Gate) | `fast-api-lab/app/schemas/task.py` <br> `fast-api-lab/app/repositories/task_repository.py` <br> `fast-api-lab/app/services/task_service.py` <br> `fast-api-lab/app/routers/tasks.py` <br> `fast-api-lab/tests/services/test_task_service.py` <br> `fast-api-lab/tests/tasks_api/test_tasks_api.py` | ✅ 已完成 | Task CRUD 完整三層 Clean Architecture、Depends 依賴覆寫 (dependency_overrides)、Fixture 作用域、TestClient 整合測試 (25/25 通過) |
 | **Ex-07** | Task Dependencies 有向圖 (DAG) 與循環依賴驗證 | W7 | `fast-api-lab/app/schemas/task_plan.py` <br> `fast-api-lab/tests/agent/test_task_plan_validation.py` | ✅ 已完成 | 有向圖 (DAG) 建立, 不存在依賴 ID 檢查, DFS 循環依賴偵測與 cycle_path 提取, pytest 單元測試 (40/40 通過) |
+| **Ex-08** | PostgreSQL / SQLAlchemy ORM 與 Alembic 資料庫遷移 | W5-W6 | `fast-api-lab/app/database.py` <br> `fast-api-lab/app/model/task.py` <br> `fast-api-lab/alembic/` <br> `fast-api-lab/app/repositories/task_repository.py` <br> `fast-api-lab/tests/repositories/test_task_repository_db.py` | ⏳ 進行中 (已投入 1.0 h) | PostgreSQL DATABASE_URL 配置, SQLAlchemy ORM Mapping (`TaskModel`), Alembic autogenerate 遷移腳本, TaskRepository 連線 Session 管理, SQLite In-Memory DB 測試 |
 
 ---
 
