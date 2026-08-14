@@ -4,6 +4,7 @@ from fastapi import Depends
 from app.repositories.task_repository import TaskRepository
 from app.services.task_service import TaskService
 from app.database import get_db
+from sqlalchemy.orm import Session
 
 _repo = ItemRepository()
 

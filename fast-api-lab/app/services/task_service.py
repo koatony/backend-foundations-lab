@@ -12,8 +12,8 @@ class TaskService():
     def create_task(self, task:TaskCreate) -> TaskResponse:
         return self.task_repo.create(task)
 
-    def list_tasks(self)->list[TaskResponse]:
-        return self.task_repo.list_all()
+    def list_tasks(self,skip:int= 0, limit:int = 10,status:str | None = None)->list[TaskResponse]:
+        return self.task_repo.list_all(skip=skip, limit=limit, status=status)
 
 
     def update_task(self, task_id:str, task_input:TaskUpdate)->TaskResponse:

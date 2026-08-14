@@ -4,9 +4,16 @@ from app.main import app
 from app.dependencies import get_task_service
 from app.repositories.task_repository import TaskRepository
 from app.services.task_service import TaskService
+from sqlalchemy.orm import Session
+from sqlalchemy.pool import StaticPool
+from app.database import Base
+from typing import Generator
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from app.dependencies import get_db
 
 
-
+from app.models import TaskModel
 # 建立初始化資料
 @pytest.fixture
 def created_task(client):
@@ -19,14 +26,41 @@ def created_task(client):
     assert resp.status_code == 201
     return resp.json()
 
+
+@pytest.fixture(scope="function")
+def db_session() -> Generator[Session, None, None]:
+    """
+    每個測試使用一個乾淨的記憶體 SQLite 資料庫。
+    """
+    # 建立記憶體引擎
+    engine = create_engine("sqlite:///:memory:",connect_args={"check_same_thread":False},poolclass=StaticPool)
+    
+    # 建立所有測試用的 Model (透過 app.database 匯入的 Base，會自動抓到已註冊的 TaskModel)
+    Base.metadata.create_all(engine)
+    
+    # 建立 Session
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    db = SessionLocal()
+    
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+
+
+
 @pytest.fixture
-def client():
+def client(db_session):
     """每個測試案例前建立全新的 TaskRepository，並以 dependency_overrides 注入"""
     # TODO: 待重構。因為 TaskRepository 現在需要傳入 db 參數，此處需要改為覆蓋 get_db 以使用記憶體資料庫
     # 現在先暫時註解起來，避免 NameError 與 TypeError 造成專案報錯而無法啟動
     # repo = TaskRepository()
     # task_service = TaskService(repo)
     # app.dependency_overrides[get_task_service] = lambda: task_service
+
+    app.dependency_overrides[get_db] = lambda: db_session
 
     yield TestClient(app)
     app.dependency_overrides.clear()
@@ -121,3 +155,53 @@ def test_delete_task_api_success(client,created_task):
     assert resp.status_code == 404
     assert resp.json()["code"] == "NOT_FOUND"
     assert resp.json()["message"] == f"任務ID {task_id} 不存在於資料庫中"
+
+
+def test_list_tasks_with_pagination(client):
+    # 發送 GET /tasks?skip=0&limit=2，斷言回傳陣列長度與 JSON 內容。
+    payload1 ={"title":"test1","description":"test","priority":"HIGH"}
+    payload2 ={"title":"test2","description":"test","priority":"HIGH"}
+    payload3 ={"title":"test3","description":"test","priority":"HIGH"}
+    resp1 = client.post("/tasks",json=payload1)
+    resp2 = client.post("/tasks",json=payload2)
+    resp3 = client.post("/tasks",json=payload3)
+    assert resp1.status_code == 201
+    assert resp2.status_code == 201
+    assert resp3.status_code == 201
+
+
+    resp = client.get("/tasks", params={"skip": 0, "limit": 2})
+    assert resp.status_code == 200
+    assert len(resp.json()) == 2
+    assert resp.json()[0]["title"] == "test1"
+    assert resp.json()[1]["title"] == "test2"
+    
+    
+    
+    
+    
+
+def test_list_tasks_with_status_filter(client):
+    # 發送 GET /tasks?status=TODO，斷言只包含 TODO 狀態的任務。
+
+    payload1 ={"title":"test1","description":"test","priority":"HIGH"}
+    payload2 ={"title":"test2","description":"test","priority":"HIGH"}
+    payload3 ={"title":"test3","description":"test","priority":"HIGH"}
+    resp1 = client.post("/tasks",json=payload1)
+    resp2 = client.post("/tasks",json=payload2)
+    resp3 = client.post("/tasks",json=payload3)
+    assert resp1.status_code == 201
+    assert resp2.status_code == 201
+    assert resp3.status_code == 201
+
+    resp = client.put(f"/tasks/{resp1.json()["id"]}",json={"status":"DONE"})
+    
+
+
+    resp = client.get("/tasks", params={"status": "TODO"})
+    assert resp.status_code == 200
+    assert len(resp.json()) == 2
+    assert resp.json()[0]["title"] == "test2"
+    assert resp.json()[1]["title"] == "test3"
+    assert resp.json()[0]["status"] == "TODO"
+    assert resp.json()[1]["status"] == "TODO"

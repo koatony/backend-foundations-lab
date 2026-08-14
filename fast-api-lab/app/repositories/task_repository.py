@@ -77,8 +77,14 @@ class TaskRepository:
             return None
         return _to_TaskResponse(target)
 
-    def list_all(self) -> list[TaskResponse]:
-        target = self.db.query(TaskModel).all()
+
+
+    # 應該要限制流量
+    def list_all(self, limit: int = 10, skip:int = 0, status:Optional[str] = None) -> list[TaskResponse]:
+        query = self.db.query(TaskModel)
+        if status:
+            query = query.filter(TaskModel.status == status)
+        target = query.limit(limit).offset(skip).all()
         return [_to_TaskResponse(t) for t in target]
 
     def delete(self, task_id: str) -> bool:
@@ -89,3 +95,7 @@ class TaskRepository:
         self.db.commit()
         return True
         
+
+
+    
+    

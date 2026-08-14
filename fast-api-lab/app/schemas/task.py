@@ -13,10 +13,10 @@ class TaskCreate(BaseModel):
 
 # 更新時不用填寫完整
 class TaskUpdate(BaseModel):
-    title:str | None
-    description: str | None
-    priority : Literal["LOW","MEDIUM","HIGH"] | None
-    status : Literal["TODO","IN_PROGRESS","DONE"] | None
+    title:str | None = None
+    description: str | None = None
+    priority : Literal["LOW","MEDIUM","HIGH"] | None = None
+    status : Literal["TODO","IN_PROGRESS","DONE"] | None = None
 
 # 回傳給前端的資料
 class TaskResponse(BaseModel):

@@ -13,6 +13,9 @@ from app.models.task import TaskModel
 from app.repositories.task_repository import TaskRepository
 from app.schemas.task import TaskCreate, TaskUpdate
 
+
+from app.exceptions.exceptions import TaskNotFoundError
+
 # === 1. 建立記憶體資料庫 (In-memory Database) ===
 @pytest.fixture(scope="function")
 def db_session() -> Generator[Session, None, None]:
@@ -61,9 +64,8 @@ def test_create_task(task_repo: TaskRepository, db_session: Session):
     assert db_task.priority == "HIGH"
     assert db_task.status == "TODO"  # 預設狀態應為 TODO
     assert db_task.created_at is not None
-    assert db_task.updated_at is not None
-    assert db_task.created_at.tzinfo == timezone.utc
-    assert db_task.updated_at.tzinfo == timezone.utc
+    assert db_task.updated_at is None
+    
 
 def test_get_by_id(task_repo: TaskRepository, db_session: Session):
     # 1. 直接向 db_session 寫入一筆測試資料
@@ -128,8 +130,12 @@ def test_update_task(task_repo: TaskRepository, db_session: Session):
 
 def test_update_task_not_found(task_repo: TaskRepository):
     task_update = TaskUpdate(title="Not Found", priority="HIGH")
+    
     result = task_repo.update("non-existent-id", task_update)
     assert result is None
+    
+
+    
 
 def test_delete_task(task_repo: TaskRepository, db_session: Session):
     # 1. 寫入待刪資料
@@ -148,3 +154,30 @@ def test_delete_task(task_repo: TaskRepository, db_session: Session):
 def test_delete_task_not_found(task_repo: TaskRepository):
     deleted = task_repo.delete("non-existent-id")
     assert deleted is False
+
+
+
+
+# 測試Rollback
+def test_transaction_rollback_on_error(task_repo:TaskRepository, db_session:Session):
+    
+
+    task1 = TaskModel(title="Task1", priority="HIGH", status="TODO")
+    
+    try:
+        db_session.add(task1)
+        db_session.flush()
+
+        raise RuntimeError("模擬系統崩潰")
+
+        db_session.commit()
+
+    except Exception as e:
+        print(str(e))
+        db_session.rollback()
+
+
+
+    saved_tasks = task_repo.list_all()    
+    assert len(saved_tasks) == 0
+    

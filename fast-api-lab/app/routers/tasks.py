@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, status, Response
 from app.schemas.task import TaskCreate, TaskResponse, TaskUpdate
 from app.services.task_service import TaskService
 from app.dependencies import get_task_service
-
+from fastapi import Query
+from typing import Optional
 
 router = APIRouter(prefix="/tasks",tags=["tasks"])
 
@@ -12,8 +13,13 @@ def create_task(task:TaskCreate, task_service:TaskService=Depends(get_task_servi
 
 
 @router.get("", status_code=status.HTTP_200_OK, response_model = list[TaskResponse])
-def list_all(task_service:TaskService=Depends(get_task_service)):
-    return task_service.list_tasks()
+def list_all(
+        skip:int = Query(0, ge=0),
+        limit:int = Query(10, ge=0),
+        status:Optional[str] = None,
+        task_service:TaskService=Depends(get_task_service)
+    ):
+    return task_service.list_tasks(skip, limit, status)
 
 
 @router.get("/{task_id}", status_code=status.HTTP_200_OK, response_model=TaskResponse)
