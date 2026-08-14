@@ -8,8 +8,8 @@
 ## 📊 衝刺進度儀表板 (Dashboard)
 
 - **總目標題數**：30 題（第一階段核心骨架，後續可動態擴充至 60-80 題）
-- **已完成題目**：2 / 30
-- **完成率**：6.7%
+- **已完成題目**：3 / 30
+- **完成率**：10.0%
 - **時間紀錄檔**：`LEETCODE_CPP_TIME_LOG.md`
 
 ---
@@ -19,7 +19,7 @@
 ### 1. 陣列、前綴和與雙指針 (Array, Prefix Sum & Two Pointers)
 - [x] **LeetCode 560. Subarray Sum Equals K (Medium)** — *Prefix Sum + Hash Map ($O(N)$)*
 - [x] **LeetCode 15. 3Sum (Medium)** — *Sorting + Two Pointers ($O(N^2)$)*
-- [ ] **LeetCode 11. Container With Most Water (Medium)** — *Two Pointers 相向收縮 ($O(N)$)*
+- [x] **LeetCode 11. Container With Most Water (Medium)** — *Two Pointers 相向收縮 ($O(N)$)*
 - [ ] **LeetCode 42. Trapping Rain Water (Hard)** — *Two Pointers / Monotonic Stack ($O(N)$)*
 
 ---
