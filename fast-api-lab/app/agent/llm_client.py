@@ -6,9 +6,9 @@ from openai import OpenAI
 class LLMClient:
     def __init__(self):
         self.client = OpenAI(
-            api_key = settings.OPENROUTER_API_KEY,
+            api_key = settings.OPENROUTER_API_KEY or "dummy-key-for-testing",
             base_url = settings.OPENROUTER_BASE_URL
-    )
+        )
 
     def generate(self, system_prompt: str, user_prompt: str) -> str:
         response = self.client.chat.completions.create(
