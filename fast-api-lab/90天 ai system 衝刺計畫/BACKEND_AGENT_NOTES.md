@@ -13,6 +13,13 @@
 - **`os.environ` 寫入的致命副作用**：直接修改 `os.environ["KEY"] = "val"` 會將變數留在全域 Python 行程記憶體中，造成**測試污染 (Test State Leakage)**，破壞後續其他測試。
 - **`monkeypatch.setenv()` 機制**：具有 **Function Scope (函數作用域)**。僅在該測試函數執行期間修改環境變數，函數結束微秒間**自動還原環境變數**，保證單元測試的獨立性與重複驗證性。
 
+### 3. FastAPI 洋蔥圈 Middleware 與 `ContextVar` 跨協程 Trace ID 追蹤
+- **定義**：`ContextVar` 是 Python 3.7+ 專為 **Async 非同步協程 (Task)** 設計的**上下文資料隔離機制**。
+- **解決兩大痛點**：
+  1. **免去參數污染 (Parameter Pollution)**：無需把 `trace_id` 一層層寫進幾十個業務函式的參數列裡傳遞。
+  2. **解決 `ThreadLocal` 覆蓋災難**：傳統 Web 是「一請求一 Thread」，可用 `ThreadLocal`。但 Async（FastAPI）是「成千上萬個 Request 跑在**同一個 Thread** 上輪流切換」。若用 `ThreadLocal`，Request A 切去 Request B 時，全域變數會被覆蓋竄改。
+- **底層運算邏輯**：全域宣告的 `ContextVar` 只是 **Key (鑰匙)**，真正的 Value 存在每個 **Async Task 各自獨立的私有字典 (Context)** 裡。呼叫 `.get()` 時，Python 自動依當前正在跑的 Task 取值，即便在同一個 Thread 快速切換，資料也**絕對不會打架**。
+
 ---
 
 ## 📌 主題二：FastAPI 同步 (Sync) 與非同步 (Async) 核心架構與併發機制

@@ -29,7 +29,7 @@
 | **Ex-7.3** | DAG 有向無環圖與 DFS 三色標記法環路檢測 | Module 7 | `fast-api-lab/tests/agent/test_dag.py` | 🔄 基礎完成/待底層驗證 | DFS 三色 (White/Gray/Black), Back Edge 與拓撲排序 |
 | **Ex-7.4** | PostgreSQL `pgvector` 向量檢索與 RAG 整合 | Module 7 | `fast-api-lab/app/agent/rag_retriever.py` | ⏳ 進行中 | Cosine Distance, HNSW / IVFFlat 向量索引, Tool 語意檢索 |
 | **Ex-8.1** | `pydantic-settings` 環境變數動態注入解耦 | Module 8 | `fast-api-lab/app/core.py` | ✅ 完成 | 12-Factor App 理念, `.env` 自動型別轉換, `monkeypatch` 隔離 |
-| **Ex-8.2** | FastAPI 洋蔥圈 Middleware 與 Correlation ID | Module 8 | `fast-api-lab/app/middleware/logging.py` | ⏳ 進行中 | Starlette 請求/響應攔截鏈, `ContextVar` 跨協程追蹤 |
+| **Ex-8.2** | FastAPI 洋蔥圈 Middleware 與 Correlation ID | Module 8 | `fast-api-lab/app/middleware/logging.py` | ✅ 完成 | Starlette 請求/響應攔截鏈, `ContextVar` 跨協程 Trace ID |
 | **Ex-8.3** | Structured JSON Logging 與系統整合測試 | Module 8 | `fast-api-lab/app/utils/logger.py` | ⏳ 進行中 | ELK/Prometheus 標準 JSON 格式, Trace ID 格式化 |
 | **Ex-8.4** | Token Bucket 令牌桶限流中間件實作 | Module 8 | `fast-api-lab/app/middleware/rate_limit.py` | ⏳ 進行中 | 令牌桶演算法, 防止 LLM API 額度耗盡與 HTTP 429 處理 |
 | **Ex-9.1** | Linux Namespaces 與 Cgroups 硬體限額驗證 | Module 9 | `fast-api-lab/scripts/docker_test.sh` | 待完成 | PID/NET/MNT 隔離, Cgroups CPU/RAM 限制 |

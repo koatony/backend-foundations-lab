@@ -9,12 +9,16 @@ from app.core import settings
 from app.routers.tasks import router as tasks_router
 from app.exceptions.exceptions import TaskNotFoundError
 
-
+from app.middleware.logging import CorrelationIDMiddleware
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version="1.0.0"
 )
+# 註冊中間件
+app.add_middleware(CorrelationIDMiddleware)
+
+
 app.include_router(items_router)
 app.include_router(tasks_router)
 

@@ -15,6 +15,7 @@
 - [📌 主題二：高併發、OS 系統調用與持久化寫入 (High Concurrency & OS Syscalls)](#-主題二高併發os-系統調用與持久化寫入-high-concurrency--os-syscalls)
   - [題 2.1: 高併發寫入瓶頸、WAL 刷盤與 `fsync()` 系統調用開銷](#題-21-高併發寫入瓶頸wal-刷盤與-fsync-系統調用開銷)
 - [📌 主題三：Python 高級語言特性與異步併發 (Python Core & Async)](#-主題三python-高級語言特性與異步併發-python-core--async)
+  - [題 3.1: 異步架構下的分散式追蹤 (Correlation ID) 與 `ContextVar` 隔離機制](#題-31-異步架構下的分散式追蹤-correlation-id-與-contextvar-隔離機制)
 - [📌 主題四：分佈式系統、快取與微服務防禦 (Distributed Systems & Redis)](#-主題四分佈式系統快取與微服務防禦-distributed-systems--redis)
 
 ---
@@ -231,7 +232,26 @@ for user in users:
 
 ## 📌 主題三：Python 高級語言特性與異步併發 (Python Core & Async)
 
-*(預留主題目錄，後續題目將新增於此)*
+### 題 3.1: 異步架構下的分散式追蹤 (Correlation ID) 與 `ContextVar` 隔離機制
+
+#### ❓ 【題目情境】
+在微服務與 FastAPI 異步架構中，工程師需要在每個 HTTP 請求進來時自動生成或繼承一個全系統唯一的 Correlation ID (Trace ID)，並確保後續所有層級 (Service/Repo/Logger) 的日誌都能自動列印該 ID。
+1. 為什麼不能把 Trace ID 存在傳統的 `threading.local()` 中？
+2. 為什麼 `contextvars.ContextVar` 能解決異步協程 (Coroutine/Task) 切換時的數據覆蓋問題？
+
+#### 💡 【硬核解答與 30 秒面試口述模板】
+
+##### 1. 底層原理分析：
+- **`ThreadLocal` 災難成因**：傳統 Web 框架（如 Django）是「一請求一 Thread」，可用 `ThreadLocal` 靠執行緒隔離。但在 Async/FastAPI 架構下，成千上萬個 Request 均運行在**同一個 Event Loop 主執行緒**上輪流切換。若用 `ThreadLocal`，Request A 遇到 I/O 切去 Request B 時，全域變數會被後者覆蓋竄改。
+- **`ContextVar` 運算機制**：全域宣告的 `ContextVar` 只是 **Key (鑰匙)**，真正的資料儲存在每個 **Async Task 各自獨立的私有字典 (Context)** 裡。當呼叫 `.get()` 時，Python 會自動抓取「當前正在跑的 Task」取值，即便在同一個 Thread 快速切換，資料也**絕對不會打架**。
+
+##### 2. 面試標準 30 秒口述模板 (Speech Template)：
+> *「我們在做 Distributed Tracing 記錄每筆請求的 Trace ID 時，不會選擇把 ID 一層層當參數傳進底層函式，也不會用傳統的 ThreadLocal。因為在 Async 架構下所有協程都在同一個主執行緒切換，用 ThreadLocal 會互相覆蓋；所以我們會使用 `ContextVar`，讓每個非同步 Task 擁有自己獨立的上下文，既能隨處存取 Trace ID，又能保證請求間的資料隔離。」*
+
+#### 🔗 【專案對應與實作連結】
+- **所屬模組**：Module 8 (Ex-8.2)
+- **實作/對應檔案**：[EXERCISES.md (Ex-8.2)](file:///home/wmlab/backend-foundations-lab/fast-api-lab/90天%20ai%20system%20衝刺計畫/EXERCISES.md#L32)
+- **專案狀態**：✅ 已完成中間件實作（參見 [`app/middleware/logging.py`](file:///home/wmlab/backend-foundations-lab/fast-api-lab/app/middleware/logging.py)）
 
 ---
 
