@@ -7,9 +7,9 @@
 
 ## 📊 衝刺進度儀表板 (Dashboard)
 
-- **總目標題數**：40 題（含台積電 IT 高頻核心題與二分圖 / 圖論擴充）
-- **已完成題目**：21 / 40
-- **完成率**：52.5%
+- **總目標題數**：44 題（含台積電 IT 高頻核心題、BST/多源BFS/並查集與二分圖擴充）
+- **已完成題目**：28 / 44
+- **完成率**：63.6%
 - **時間紀錄檔**：`LEETCODE_CPP_TIME_LOG.md`
 
 ---
@@ -52,8 +52,14 @@
 ---
 
 ### 5. 樹狀結構與遞迴 (Binary Tree & DFS/BFS)
-- [ ] **LeetCode 102. Binary Tree Level Order Traversal (Medium)** — *樹狀結構 BFS (`std::queue`)*
-- [ ] **LeetCode 236. Lowest Common Ancestor of a Binary Tree (Medium)** — *樹狀遞迴 DFS*
+- [x] **LeetCode 236. Lowest Common Ancestor of a Binary Tree (Medium)** — *樹狀遞迴 DFS (Post-order / Divide & Conquer)*
+- [x] **LeetCode 226. Invert Binary Tree (Easy)** — *子樹指標對調 (`swap`) / 前序或後序遞迴*
+- [x] **LeetCode 101. Symmetric Tree (Easy)** — *雙指標鏡像比對 (`isMirror` 同步遞迴)*
+- [x] **LeetCode 104. Maximum Depth of Binary Tree (Easy)** — *樹最大深度 / 遞迴 DFS*
+- [x] **LeetCode 102. Binary Tree Level Order Traversal (Medium)** — *樹狀結構 BFS (`std::queue`)*
+- [x] **LeetCode 543. Diameter of Binary Tree (Easy)** — *二叉樹直徑 / 後序遞迴 DFS (Left Depth + Right Depth)*
+- [ ] **LeetCode 98. Validate Binary Search Tree (Medium)** — *BST 遞迴上下界維護 / 中序遍歷性質*
+- [x] **LeetCode 105. Construct Binary Tree from Preorder and Inorder Traversal (Medium)** — *前序與中序樹狀重建 / 遞迴 Index Range*
 
 ---
 
@@ -65,11 +71,13 @@
 - [x] **LeetCode 785. Is Graph Bipartite? (Medium)** — *Bipartite Graph Coloring BFS/DFS*
 - [x] **LeetCode 886. Possible Bipartition (Medium)** — *建圖 + 二分圖著色應用題 (Bipartite Graph / Union-Find)*
 - [x] **LeetCode 2493. Divide Nodes Into the Maximum Number of Groups (Hard)** — *連通分量 + 二分圖染色 + 全源 BFS 最大深度 ($O(V(V+E))$)*
+- [ ] **LeetCode 994. Rotting Oranges (Medium)** — *Multi-source BFS 網格擴散模擬*
+- [ ] **LeetCode 547. Number of Provinces (Medium)** — *Union-Find (並查集) 基礎 / 矩陣連通分量*
 
 ---
 
 ### 7. 動態規劃與記憶化搜尋 (Dynamic Programming)
-- [ ] **LeetCode 322. Coin Change (Medium)** — *Unbounded Knapsack / DP State Transition*
+- [ ] 📌 **LeetCode 322. Coin Change (Medium)** — *Unbounded Knapsack / DP State Transition (下次起點)*
 - [ ] **LeetCode 300. Longest Increasing Subsequence (Medium)** — *DP ($O(N^2)$) & Binary Search ($O(N \log N)$)*
 - [ ] **LeetCode 1143. Longest Common Subsequence (Medium)** — *2D DP Grid*
 - [ ] **LeetCode 198. House Robber (Medium)** — *1D DP State Machine*

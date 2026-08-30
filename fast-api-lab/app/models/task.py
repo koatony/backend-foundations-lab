@@ -1,7 +1,9 @@
-from sqlalchemy import Column, String, DateTime, Text
+from sqlalchemy import Column, String, DateTime, Text, Index, ForeignKey
+from sqlalchemy.orm import relationship
 from app.database import Base
 from datetime import datetime, timezone
 import uuid
+
 
 class TaskModel(Base):
     __tablename__ = "tasks"
@@ -13,7 +15,14 @@ class TaskModel(Base):
     
     priority = Column(String, default="MEDIUM", nullable=False)
     status = Column(String, default="TODO", nullable=False)
+
+    user_id = Column(String, ForeignKey("users.id"), nullable=True)
+    user = relationship("UserModel", back_populates="tasks")
     
     # 在 Python 端使用 datetime.now(timezone.utc) 生成標準 UTC 時間
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     updated_at = Column(DateTime, onupdate=lambda: datetime.now(timezone.utc), nullable=True)
+
+    __table_args__ = (
+        Index("idx_status_created", "status", "created_at"),
+    )

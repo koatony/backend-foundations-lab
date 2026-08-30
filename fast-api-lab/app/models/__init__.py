@@ -1,4 +1,4 @@
-from app.database import Base
 from app.models.task import TaskModel
+from app.models.user import UserModel
 
-__all__ = ["Base", "TaskModel"]
+__all__ = ["TaskModel", "UserModel"]

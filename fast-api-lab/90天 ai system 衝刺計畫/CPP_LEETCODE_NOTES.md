@@ -62,6 +62,69 @@
   * **為什麼能暴力搜尋？**：一般圖（含偶環）無法使用樹的「兩次 BFS」貪婪法尋找直徑；因此枚舉所有點跑全源 BFS 就是此題的標準最優解。
   * **樹的直徑（兩次 BFS）**：僅適用於無環樹（Tree）。面試（如台積電）只需掌握兩次 BFS 的實作原理與適用限制，不需白板推導反證法。
 
+### LeetCode 236. Lowest Common Ancestor of a Binary Tree (Medium)
+* **學員狀態標記 ⚠️**：目前為**硬背記憶模板階段**。對遞迴思維與 Call Stack 傳遞回傳值機制尚不敏感，後續複習需著重拆解思考步驟而非死記程式碼。
+* **核心思想 (分治法 / 後序遍歷)**：
+  * 本題採用**後序遍歷 (Post-order Traversal)**「先探查左右子樹，再根據兩側回傳值決定當前節點狀態」的匯集機制。
+* **C++ 實作範例**：
+  ```cpp
+  class Solution {
+  public:
+      TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+          // Base Case: 遇到空節點，或當前節點即為 p 或 q，向上回傳自己
+          if (!root || root == p || root == q) {
+              return root;
+          }
+
+          // Divide: 探查左子樹與右子樹
+          TreeNode* left = lowestCommonAncestor(root->left, p, q);
+          TreeNode* right = lowestCommonAncestor(root->right, p, q);
+
+          // Combine: 依據左右子樹回傳結果進行判斷
+          if (left && right) {
+              return root; // 兩側皆非空 -> 當前 root 即為 LCA
+          }
+
+          return left ? left : right; // 單側非空 -> 向上傳遞該側發現的節點；兩側皆空 -> 回傳 nullptr
+      }
+  };
+  ```
+* **遞迴直覺培養指南 (從硬背轉化為理解)**：
+  1. **別想太深**：不要試圖在腦中展開整個 Call Stack 的幾十層遞迴；只需專注於**「當前節點 `root` 拿到了左側 `left` 與右側 `right` 的結果後，該做什麼反應」**。
+  2. **三種情境分流**：
+     - 情境 A (`left && right`)：左子樹找到一個、右子樹找到一個，說明 `p` 和 `q` 分立兩側 $\implies$ 我就是最近公共祖先 (LCA)，回傳 `root`。
+     - 情境 B (`left || right`)：只有一側有找到（例如左邊找到了 LCA 或某目標點），說明兩點都在同側 $\implies$ 直接把左邊的答案向上傳遞。
+     - 情境 C (`!left && !right`)：左右都沒找到 $\implies$ 回傳 `nullptr`。
+
+### LeetCode 226. Invert Binary Tree (Easy)
+* **核心思想 (子樹指標對調)**：
+  * **自頂向下或自底向上 (前序 / 後序遍歷)**：核心為 `swap(root->left, root->right)`，遞迴處理左右子樹。
+  * **關鍵注意點**：若採用前序/後序遍歷，需注意避免單邊指標被覆蓋後遺失。
+
+### LeetCode 101. Symmetric Tree (Easy)
+* **核心思想 (雙指標鏡像比對)**：
+  * **前序延伸 (同步遞迴 / Simultaneous Traversal)**：開 Helper 函式 `isMirror(t1, t2)` 同時走訪兩節點。
+  * **交叉比對關鍵**：比對 `t1->val == t2->val` 並遞迴交叉比對 `t1->left` vs `t2->right` 與 `t1->right` vs `t2->left`。
+
+---
+
+### 🧠 二元樹核心三大遍歷模式與思維收斂 (LC 236 / LC 226 / LC 101)
+
+| 題目 | 核心概念 | 遍歷本質 | 關鍵解題思維 |
+| --- | --- | --- | --- |
+| **LC 236**<br>二元樹最近公共祖先 (LCA) | **分治法 (Divide & Conquer)**<br>Bottom-Up 匯總 | **後序遍歷 (Post-order)** | 左右子樹各回報搜尋結果；若左右皆有回報，當前節點即為分叉點 (LCA)。 |
+| **LC 226**<br>翻轉二元樹 (Invert Tree) | **子樹指標對調**<br>自頂向下或自底向上 | **前序 / 後序遍歷** | 核心為 `swap(root->left, root->right)`，需注意避免單邊指標被覆蓋後遺失。 |
+| **LC 101**<br>對稱二元樹 (Symmetric Tree) | **雙指標鏡像比對**<br>Simultaneous Traversal | **前序延伸 (同步遞迴)** | 開 Helper 函式同時走訪兩節點，交叉比對 `t1->left` vs `t2->right` 與 `t1->right` vs `t2->left`。 |
+
+#### 核心思維對比：
+1. **單樹傳遞 vs 雙樹比對**：
+   * **單一二元樹的問題**（如 236、226）：通常依賴「當前節點 + 左右子問題」。
+   * **涉及兩樹結構比較**（如 101 對稱、100 相同樹）：習慣開 `isMirror(t1, t2)` 雙指標同步比對。
+2. **資訊流向**：
+   * **由上往下做 (Top-Down / 前序)**：先改變當前節點狀態，再丟給小孩做（如 226 翻轉）。
+   * **由下往上做 (Bottom-Up / 後序)**：小孩先算完回報給父節點做決定（如 236 LCA）。
+
 ---
 
 > 📝 *後續新的 C++ 與 LeetCode 筆記將持續補充於此處。*
+

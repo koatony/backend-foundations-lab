@@ -181,3 +181,53 @@ def test_transaction_rollback_on_error(task_repo:TaskRepository, db_session:Sess
     saved_tasks = task_repo.list_all()    
     assert len(saved_tasks) == 0
     
+
+
+def test_transaction_full_rollback_on_batch_error(db_session:Session):
+    try:
+        for i in range(1,6):
+            if i == 3:
+                raise ValueError("Stop at 3")
+            
+            task = TaskModel(id = f"task_{i}",title = f"task_{i}")
+            db_session.add(task)
+            db_session.flush()
+        
+        db_session.commit()
+    except Exception as e:
+        print(str(e))
+        db_session.rollback()
+
+    
+    saved_tasks = db_session.query(TaskModel).all()
+    assert len(saved_tasks) == 0 
+
+
+
+def test_transaction_partial_rollback_on_batch_error(db_session:Session):
+    db_session.add(TaskModel(id = "task_1",title = "task_1"))
+    db_session.add(TaskModel(id = "task_2",title = "task_2"))
+    db_session.flush()
+
+    savepoint = db_session.begin_nested()
+
+    try:
+        db_session.add(TaskModel(id = "task_3",title = "task_3"))
+        db_session.flush()
+        raise ValueError("Error at 3")
+    except Exception as e:
+        print(str(e))
+        savepoint.rollback()
+
+    db_session.commit()
+
+    task = db_session.query(TaskModel).filter(TaskModel.id == "task_3").first()
+    assert task is None 
+
+    task = db_session.query(TaskModel).filter(TaskModel.id == "task_1").first()
+    assert task is not None
+
+    task = db_session.query(TaskModel).filter(TaskModel.id == "task_2").first()
+    assert task is not None
+
+    

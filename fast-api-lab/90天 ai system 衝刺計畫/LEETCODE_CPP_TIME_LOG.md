@@ -6,13 +6,41 @@
 
 ## 📊 累積時間統計
 
-- **本週累積時間**：1.0 小時
-- **總累積時間**：2.8 小時
-- **目前完成題數**：4 題
+- **本週累積時間**：3.0 小時
+- **總累積時間**：4.8 小時
+- **目前紀錄題數**：9 題
 
 ---
 
 ## 📅 每日練習明細 (Daily Log)
+
+### 2026-08-29 (Saturday)
+- **花費時間**：1.0 小時
+- **練習內容**：LeetCode 104 (Maximum Depth of Binary Tree), LeetCode 543 (Diameter of Binary Tree)
+- **解題重點與筆記**：
+  - **二叉樹深度與直徑遞迴模式**：
+    1. **LC 104 (Maximum Depth / 樹最大深度)**： Bottom-Up 後序遞迴 `1 + max(left_depth, right_depth)`。
+    2. **LC 543 (Diameter of Binary Tree / 二叉樹直徑)**：經過某節點的最長路徑即為 `left_depth + right_depth`。在計算樹深度的 Bottom-Up DFS 中，同步更新 `max_diameter = max(max_diameter, left_depth + right_depth)`。
+  - **核心觀念彙整**：
+    - 樹的深度 (`Height`) 與直徑 (`Diameter`) 皆可統一利用**後序遍歷 (Post-order DFS)** 在同一趟遍歷中一次算完，避免重複計算子樹深度 ($O(N)$ 時間複雜度)。
+  - **下次學習目標**：開啟 **第 7 章 動態規劃與記憶化搜尋 (DP)**，從 **LeetCode 322 (Coin Change)** 開始衝刺。
+
+---
+
+### 2026-08-28 (Friday)
+- **花費時間**：1.0 小時
+- **練習內容**：LeetCode 236 (LCA), LeetCode 226 (Invert Tree), LeetCode 101 (Symmetric Tree)
+- **解題重點與筆記**：
+  - **二元樹核心三大遍歷模式與思維收斂**：
+    1. **LC 236 (LCA / 後序遍歷)**：Divide & Conquer，左右子樹回報搜尋結果，雙側皆有回報時當前點即為 LCA。
+    2. **LC 226 (Invert Tree / 前序或後序遍歷)**：`swap(root->left, root->right)` 子樹指標對調。
+    3. **LC 101 (Symmetric Tree / 同步遞迴前序延伸)**：`isMirror(t1, t2)` 雙指標鏡像交叉比對 `t1->left` vs `t2->right` 與 `t1->right` vs `t2->left`。
+  - **核心觀念彙整**：
+    - **單樹 vs 雙樹**：單樹依賴當前點+左右子問題；雙樹比對開 `isMirror` 雙指標。
+    - **資訊流向**：Top-Down 前序由上向下做；Bottom-Up 後序由下向上匯集決定。
+  - **下次學習目標**：從 **LeetCode 104 (Maximum Depth of Binary Tree)** 開始，隨後回歸 LeetCode 主進度。
+
+---
 
 ### 2026-08-26 (Wednesday)
 - **花費時間**：1.0 小時 (複習與除錯)
