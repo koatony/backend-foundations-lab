@@ -24,9 +24,13 @@
 | 2026-08-14 | Ex-08 DB Transaction Rollback 與 Pagination 實作 | Backend Foundations | 0.75 h | ✅ 完成 |
 | 2026-08-14 | Ex-09 API 層級 DB 整合測試與 Dependency Override | Backend Foundations | 0.75 h | ✅ 完成 |
 | 2026-08-29 | Ex-7.1 B+Tree 索引與 EXPLAIN ANALYZE 效能診斷 | Backend Foundations | 0.75 h | ✅ 完成 |
+| 2026-08-30 | Ex-7.2 ORM N+1 災難重現、`selectinload` 對比與 Savepoint 測試 | Backend Foundations | 1.5 h | ✅ 完成 |
+| 2026-08-30 | Ex-8.1 `pydantic-settings` 動態配置與 `monkeypatch` 測試 | Backend Foundations | 0.75 h | ✅ 完成 |
 
 #### 📈 Week 5 / Week 7 統計與達成率 (對照 18h 目標)
 
-- **Backend Foundations**：3.25 / 9.0 h (36.1%)
+- **Backend Foundations**：5.5 / 9.0 h (61.1%)
 - **Agent Loop Engineering**：1.0 / 3.75 h (26.7%)
-- **週總累計時數**：**4.25 / 18.0 h (23.6%)**
+- **週總累計時數**：**6.5 / 18.0 h (36.1%)**
+
+

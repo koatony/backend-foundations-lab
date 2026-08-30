@@ -1,12 +1,21 @@
-# 90天 AI System 衝刺計畫 — Backend & Agent 核心學習筆記 (BACKEND_AGENT_NOTES.md)
+---
 
-本筆記本用於紀錄 **Backend Foundations** 與 **Agent Loop Engineering** 的核心觀念、架構設計、最佳實踐、常考 Q&A 與實務踩坑經驗。
+## 📌 主題一：高可用系統工程化、環境變數與觀測性 (12-Factor App & Config)
+
+### 1. 12-Factor App 的 Config 理念與 `pydantic-settings`
+- **12-Factor App 規範**：應用程式的配置 (Config) 必須與代碼 (Code) 嚴格解耦，透過系統環境變數傳遞。
+- **敏感資訊防禦**：`.env` 包含敏感密碼，必須寫入 `.gitignore` 禁止 Commit 進 Git。Git 倉庫僅保留 `.env.example`（只包含欄位名稱的範本）。
+- **`pydantic-settings` 優先順序 (Precedence)**：
+  $$\text{OS 系統環境變數 (雲端生產 K8s/Docker)} > \text{.env 檔案 (本地開發)} > \text{Python 代碼預設值}$$
+  使同一套代碼無縫支援本地開發與雲端部署，免改任何代碼。
+
+### 2. pytest `monkeypatch` 測試隔離與環境變數模擬
+- **`os.environ` 寫入的致命副作用**：直接修改 `os.environ["KEY"] = "val"` 會將變數留在全域 Python 行程記憶體中，造成**測試污染 (Test State Leakage)**，破壞後續其他測試。
+- **`monkeypatch.setenv()` 機制**：具有 **Function Scope (函數作用域)**。僅在該測試函數執行期間修改環境變數，函數結束微秒間**自動還原環境變數**，保證單元測試的獨立性與重複驗證性。
 
 ---
 
-## 📂 筆記目錄
-
-- [📌 主題一：FastAPI 同步 (Sync) 與非同步 (Async) 核心架構與併發機制](#-主題一fastapi-同步-sync-與非同步-async-核心架構與併發機制)
+## 📌 主題二：FastAPI 同步 (Sync) 與非同步 (Async) 核心架構與併發機制
 - [📌 主題二：Clean Architecture 三層架構與 Exception Bubbling 防火牆](#-主題二clean-architecture-三層架構與-exception-bubbling-防火牆)
 - [📌 主題三：SQLAlchemy ORM 機制、Alembic 與測試環境建構](#-主題三sqlalchemy-orm-機制alembic-與測試環境建構)
 - [📌 主題四：ORM N+1 災難診斷與 Eager Loading 加載模式對比](#-主題四orm-n1-災難診斷與-eager-loading-加載模式對比)

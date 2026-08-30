@@ -23,12 +23,12 @@
 | **Ex-5.3** | 手寫 SQL 整合測試環境搭建 | Module 5 | `fast-api-lab/tests/db/test_raw_sql.py` | ⏳ 進行中 | DB Connection 手工管理, 測試資料抹除與隔離 |
 | **Ex-6.1** | Unit of Work、Identity Map 與 Dirty Tracking | Module 6 | `fast-api-lab/app/repositories/task_repository.py` | 🔄 基礎完成/待底層驗證 | Session 字典快取, 自動比對生成 `UPDATE` SQL |
 | **Ex-6.2** | Alembic 雙向鏈表 Revision 腳本與 Migration | Module 6 | `fast-api-lab/alembic/` | 🔄 基礎完成/待底層驗證 | DB 版本圖鏈表, `upgrade()` 與 `downgrade()` 冪等 |
-| **Ex-6.3** | Transaction Savepoints 與 Rollback 隔離測試 | Module 6 | `fast-api-lab/tests/repositories/test_task_db.py` | 🔄 基礎完成/待底層驗證 | `flush()` vs `commit()`, Exception 下 WAL Undo Log 復原 |
-| **Ex-7.1** | B+Tree 頁面、最左字首原則與 EXPLAIN ANALYZE | Module 7 | `fast-api-lab/scripts/explain_analysis.sql` | ⏳ 進行中 | B+Tree 樹高 3~4 層, `Seq Scan` vs `Index Only Scan` |
-| **Ex-7.2** | ORM N+1 災難重現與 `selectinload` 加載模式 | Module 7 | `fast-api-lab/tests/performance/test_n_plus_one.py` | ⏳ 進行中 | Lazy Loading N+1 產生機制, `selectinload` 兩次 SQL 最優解 |
+| **Ex-6.3** | Transaction Savepoints 與 Rollback 隔離測試 | Module 6 | `fast-api-lab/tests/repositories/test_task_repositoy_db.py` | ✅ 完成 | `flush()` vs `commit()`, Savepoint 局部回滾與 WAL 復原 |
+| **Ex-7.1** | B+Tree 頁面、最左字首原則與 EXPLAIN ANALYZE | Module 7 | `fast-api-lab/scripts/ex7_1_benchmark.py` | ✅ 完成 | B+Tree 樹高 3~4 層, `Seq Scan` vs `Index Only Scan` |
+| **Ex-7.2** | ORM N+1 災難重現與 `selectinload` 加載模式 | Module 7 | `fast-api-lab/tests/performance/test_n_plus_one.py` | ✅ 完成 | Lazy Loading N+1 產生機制, `selectinload` 兩次 SQL 最優解 |
 | **Ex-7.3** | DAG 有向無環圖與 DFS 三色標記法環路檢測 | Module 7 | `fast-api-lab/tests/agent/test_dag.py` | 🔄 基礎完成/待底層驗證 | DFS 三色 (White/Gray/Black), Back Edge 與拓撲排序 |
 | **Ex-7.4** | PostgreSQL `pgvector` 向量檢索與 RAG 整合 | Module 7 | `fast-api-lab/app/agent/rag_retriever.py` | ⏳ 進行中 | Cosine Distance, HNSW / IVFFlat 向量索引, Tool 語意檢索 |
-| **Ex-8.1** | `pydantic-settings` 環境變數動態注入解耦 | Module 8 | `fast-api-lab/app/config.py` | ⏳ 進行中 | 12-Factor App 理念, `.env` 變數自動轉型 |
+| **Ex-8.1** | `pydantic-settings` 環境變數動態注入解耦 | Module 8 | `fast-api-lab/app/core.py` | ✅ 完成 | 12-Factor App 理念, `.env` 自動型別轉換, `monkeypatch` 隔離 |
 | **Ex-8.2** | FastAPI 洋蔥圈 Middleware 與 Correlation ID | Module 8 | `fast-api-lab/app/middleware/logging.py` | ⏳ 進行中 | Starlette 請求/響應攔截鏈, `ContextVar` 跨協程追蹤 |
 | **Ex-8.3** | Structured JSON Logging 與系統整合測試 | Module 8 | `fast-api-lab/app/utils/logger.py` | ⏳ 進行中 | ELK/Prometheus 標準 JSON 格式, Trace ID 格式化 |
 | **Ex-8.4** | Token Bucket 令牌桶限流中間件實作 | Module 8 | `fast-api-lab/app/middleware/rate_limit.py` | ⏳ 進行中 | 令牌桶演算法, 防止 LLM API 額度耗盡與 HTTP 429 處理 |
